@@ -13,7 +13,6 @@ public class FrontServlet extends HttpServlet {
     RequestDispatcher dispat;
     HttpServletRequest request;
     HttpServletResponse response;
-
     public RequestDispatcher getDispat() {
         return this.dispat;
     }
@@ -43,10 +42,10 @@ public class FrontServlet extends HttpServlet {
         String incommingURL = String.valueOf(this.getRequest().getRequestURL());
         String target = this.getTarget(incommingURL);
         System.out.println("Target URL >> "+target);
+        System.out.println(this.getRequest().getParameter("test"));
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
         this.setRequest(req);
         this.setResponse(resp);
 
@@ -55,7 +54,6 @@ public class FrontServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
         this.setRequest(req);
         this.setResponse(resp);
 

@@ -7,6 +7,10 @@
         <servlet>
             <servlet-name>FrontServlet</servlet-name>
             <servlet-class>etu2079.framework.servlet.FrontServlet</servlet-class>
+            <init-param>
+                <param-name>allowedMethods</param-name>
+                <param-value>GET</param-value>
+            </init-param>
         </servlet>
 
         <servlet-mapping>
