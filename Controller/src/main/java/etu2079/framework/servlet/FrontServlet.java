@@ -41,8 +41,7 @@ public class FrontServlet extends HttpServlet {
         PrintWriter out = this.getResponse().getWriter();
         String incommingURL = String.valueOf(this.getRequest().getRequestURL());
         String target = this.getTarget(incommingURL);
-        System.out.println("Target URL >> "+target);
-        System.out.println(this.getRequest().getParameter("test"));
+        System.out.println("URL target >> "+target);
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -73,5 +72,4 @@ public class FrontServlet extends HttpServlet {
             return URL.split("/")[1];
         }
     }
-
 }
