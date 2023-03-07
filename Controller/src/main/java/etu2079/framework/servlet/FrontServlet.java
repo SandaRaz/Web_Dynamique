@@ -42,15 +42,24 @@ public class FrontServlet extends HttpServlet {
         PrintWriter out = this.getResponse().getWriter();
         String incommingURL = String.valueOf(this.getRequest().getRequestURL());
         String target = this.getTarget(incommingURL);
+        System.out.println("Target URL >> "+target);
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doGet(req, resp);
+        this.setRequest(req);
+        this.setResponse(resp);
+
+        this.processRequest();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doPost(req, resp);
+        this.setRequest(req);
+        this.setResponse(resp);
+
+        this.processRequest();
     }
 
     private String removeHttpProtocoleStr(String URL){
