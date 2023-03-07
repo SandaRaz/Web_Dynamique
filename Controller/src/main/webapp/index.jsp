@@ -5,6 +5,9 @@
     <title>JSP - Hello World</title>
 </head>
 <body>
-    <a href="./MyServlet?test=1">Send URI</a>
+<h1><%= "Hello World!" %>
+</h1>
+<br/>
+<a href="hello-servlet">Hello Servlet</a>
 </body>
 </html>
