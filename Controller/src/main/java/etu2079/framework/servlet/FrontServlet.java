@@ -2,14 +2,18 @@ package etu2079.framework.servlet;
 
 import etu2079.framework.Mapping;
 
+import etu2079.framework.MethAnnotation;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.HashMap;
 
 public class FrontServlet extends HttpServlet {
@@ -17,6 +21,15 @@ public class FrontServlet extends HttpServlet {
     HttpServletRequest request;
     HttpServletResponse response;
     private HashMap<String, Mapping> MappingUrls;
+
+    @Override
+    public void init() throws ServletException {
+        try {
+            this.fillMappingUrls();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public RequestDispatcher getDispat() {
         return this.dispat;
@@ -84,6 +97,40 @@ public class FrontServlet extends HttpServlet {
             return URL.split("/")[2];
         }else{
             return URL.split("/")[1];
+        }
+    }
+
+    private static void findAnnotedMethod(){
+
+    }
+
+    private void fillMappingUrls() throws ClassNotFoundException {
+        this.setMappingUrls(new HashMap<String, Mapping>());
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        String myPackage = "etu2079.framework.servlet";
+        String path = myPackage.replace('.', '/');
+        URL resource = classLoader.getResource(path);
+
+        assert resource != null;
+        File directory = new File(resource.getFile());
+        if(directory.exists()){
+            String[] files = directory.list();
+            assert files != null;
+            for(String file : files){
+                if(file.endsWith(".class")){
+                    String className = file.substring(0, file.length()-6 /* exemple: test.class >> enlever .class */);
+                    Class<?> clazz = Class.forName(myPackage + '.' + className);
+                    for(Method method : clazz.getDeclaredMethods()){
+                        if(method.isAnnotationPresent(MethAnnotation.class)){
+                            MethAnnotation methannot = (MethAnnotation) method.getAnnotation(MethAnnotation.class);
+                            this.getMappingUrls().put(methannot.name()+'-'+className , new Mapping(className, methannot.name()));
+                            System.out.println("Class: "+className);
+                            System.out.println("Method: "+methannot.name()+" \n");
+                        }
+                    }
+                }
+            }
         }
     }
 }
