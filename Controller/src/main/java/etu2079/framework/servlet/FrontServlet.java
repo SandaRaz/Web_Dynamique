@@ -1,5 +1,7 @@
 package etu2079.framework.servlet;
 
+import etu2079.framework.Mapping;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -8,11 +10,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 public class FrontServlet extends HttpServlet {
     RequestDispatcher dispat;
     HttpServletRequest request;
     HttpServletResponse response;
+    private HashMap<String, Mapping> MappingUrls;
+
     public RequestDispatcher getDispat() {
         return this.dispat;
     }
@@ -30,6 +35,14 @@ public class FrontServlet extends HttpServlet {
     }
     public void setResponse(HttpServletResponse response) {
         this.response = response;
+    }
+
+    public HashMap<String, Mapping> getMappingUrls() {
+        return MappingUrls;
+    }
+
+    public void setMappingUrls(HashMap<String, Mapping> mappingUrls) {
+        MappingUrls = mappingUrls;
     }
 
     public void redirect(String indexOfFile) throws ServletException, IOException {
