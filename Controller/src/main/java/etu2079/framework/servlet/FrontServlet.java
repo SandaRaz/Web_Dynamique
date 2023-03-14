@@ -78,6 +78,7 @@ public class FrontServlet extends HttpServlet {
 
     private String getTarget(String URL){
         URL = removeHttpProtocoleStr(URL);
+
         if(URL.toLowerCase().contains("_war")){
             System.out.println("'war' artifact detected");
             return URL.split("/")[2];
