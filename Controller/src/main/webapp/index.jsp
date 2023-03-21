@@ -36,8 +36,8 @@
     </form>
     <br>
     <div>
-        <a href="FrontServlet/?param=1"><div class="click">lien1</div></a>
-        <a href="FrontServlet/?param=2"><div class="click">lien2</div></a>
+        <a href="FrontServlet?param=1"><div class="click">lien1</div></a>
+        <a href="FrontServlet?param=2"><div class="click">lien2</div></a>
     </div>
 </body>
 </html>
