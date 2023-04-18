@@ -2,7 +2,7 @@
 
 set projectDir=./target/test-framework-1.0-SNAPSHOT
 set destiDir=../..
-set tomcatDir=E:\Sanda\ITU\Prog-Reseaux\apache-tomcat-10.1.2
+set tomcatDir=E:\Programmation\apache-tomcat-10.1.0-M14
 set warFile=aaa.war
 
 cd %projectDir%

@@ -1,6 +1,6 @@
-classesDir=./target/Framework-1.0-SNAPSHOT/WEB-INF/classes
+classesDir=./target/classes
 classes=./etu2079
-jarDestination=../../../../framework.jar
+jarDestination=../../framework.jar
 
 cd $classesDir
 jar -cf $jarDestination $classes
