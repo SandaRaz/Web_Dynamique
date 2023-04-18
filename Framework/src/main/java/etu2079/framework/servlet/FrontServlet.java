@@ -1,6 +1,7 @@
 package etu2079.framework.servlet;
 
 import etu2079.framework.Mapping;
+import etu2079.framework.ModelView;
 import etu2079.framework.annotation.Url;
 
 import jakarta.servlet.RequestDispatcher;
@@ -24,10 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @WebServlet(name = "FrontServlet", value = "/")
 public class FrontServlet extends HttpServlet {
@@ -55,23 +53,32 @@ public class FrontServlet extends HttpServlet {
         RequestDispatcher dispatcher = req.getRequestDispatcher(indexOfFile);
         dispatcher.forward(req, rep);
     }
+
+    public void fillingAttribute(ModelView modelView,HttpServletRequest req, HttpServletResponse rep){
+        Set<String> mvKey = modelView.getData().keySet();
+        for(String key : mvKey){
+            req.setAttribute(key, modelView.getData().get(key));
+        }
+    }
+
     protected void processRequest(HttpServletRequest req, HttpServletResponse rep) throws Exception {
         PrintWriter out = rep.getWriter();
         String incomingURL = String.valueOf(req.getRequestURL());
         String target = this.getTarget(incomingURL);
 
-        //System.out.println("Traitement URL");
-
         Mapping mapping = this.getMappingUrls().get(target);
         if(mapping != null){
-            //System.out.println("Class: "+mapping.getClassName()+" Method: "+mapping.getMethod());
             Class<?> clazz = Class.forName(mapping.getClassName());
             Constructor<?> constructor = clazz.getConstructor();
             Object clone = constructor.newInstance();
             Method method = clazz.getMethod(mapping.getMethod());
 
-            String desti = (String) method.invoke(clone);
-            this.redirect(desti, req, rep);
+            Object result = method.invoke(clone);
+            if(result instanceof ModelView){
+                ModelView modelView = (ModelView) result;
+                this.fillingAttribute(modelView, req, rep);
+                this.redirect(modelView.getView(), req, rep);
+            }
         }else{
             //System.out.println("Url inconnu");
             throw new Exception("Url inconnu");

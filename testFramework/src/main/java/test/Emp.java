@@ -1,12 +1,64 @@
 package test;
 
+import etu2079.framework.ModelView;
 import etu2079.framework.annotation.Url;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Emp {
+    public String id;
+    public String nom;
+    public double salaire;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public double getSalaire() {
+        return salaire;
+    }
+
+    public void setSalaire(double salaire) {
+        this.salaire = salaire;
+    }
+
+    public Emp(){
+
+    }
+
+    public Emp(String id, String nom, double salaire){
+        this.id = id;
+        this.nom = nom;
+        this.salaire = salaire;
+    }
 
     @Url(name = "emp-all")
-    public String getAll(){
+    public ModelView getAll(){
         System.out.println("Select * from employe");
-        return "testPage.jsp";
+
+        List<Emp> emps = new ArrayList<>();
+        emps.add(new Emp("1","AAA",1000));
+        emps.add(new Emp("2","BBB",2000));
+        emps.add(new Emp("3","CCC",3000));
+
+
+        ModelView mv = new ModelView();
+        mv.setView("allEmp.jsp");
+        mv.addItem("lst", emps);
+
+        return mv;
     }
 }
