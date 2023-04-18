@@ -2,6 +2,7 @@ package etu2079.framework.servlet;
 
 import etu2079.framework.Mapping;
 import etu2079.framework.ModelView;
+import etu2079.framework.ViewModel;
 import etu2079.framework.annotation.Url;
 
 import jakarta.servlet.RequestDispatcher;
@@ -40,7 +41,7 @@ public class FrontServlet extends HttpServlet {
 
 
     @Override
-    public void init() throws ServletException {
+    public void init(){
         try {
             String[] packages = this.readConfig();
             this.fillMappingUrls(packages);
@@ -61,6 +62,28 @@ public class FrontServlet extends HttpServlet {
         }
     }
 
+    public boolean containsViewModel(Class<?>[] parameters){
+        for(Class<?> clazz : parameters){
+            if(clazz.getName().equals("etu2079.framework.ViewModel")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Object conversion(String parametre){
+        Object value = parametre;
+        try{
+            value = Integer.parseInt(parametre);
+        }catch (NumberFormatException e1){
+            try{
+                value = Double.parseDouble(parametre);
+            }catch (NumberFormatException ignored) {
+            }
+        }
+        return value;
+    }
+
     protected void processRequest(HttpServletRequest req, HttpServletResponse rep) throws Exception {
         PrintWriter out = rep.getWriter();
         String incomingURL = String.valueOf(req.getRequestURL());
@@ -71,9 +94,34 @@ public class FrontServlet extends HttpServlet {
             Class<?> clazz = Class.forName(mapping.getClassName());
             Constructor<?> constructor = clazz.getConstructor();
             Object clone = constructor.newInstance();
-            Method method = clazz.getMethod(mapping.getMethod());
+            Method method = mapping.getMethod();
 
-            Object result = method.invoke(clone);
+            Object result = null;
+            Class<?>[] parametres = method.getParameterTypes();
+            if(this.containsViewModel(parametres)){
+                ViewModel viewModel = new ViewModel();
+
+                Enumeration<String> parameterNames = req.getParameterNames();
+                while(parameterNames.hasMoreElements()){
+                    String paramName = parameterNames.nextElement();
+                    String[] paramValues = req.getParameterValues(paramName);
+                    Object paramValue = null;
+                    if(paramValues.length == 1){
+                        paramValue = this.conversion(paramValues[0]);
+                    }else{
+                        Object[] objectValue = new Object[paramValues.length];
+                        for(int i=0;i<paramValues.length;i++){
+                            objectValue[i] = this.conversion(paramValues[i]);
+                        }
+                        paramValue = objectValue;
+                    }
+                    viewModel.addItem(paramName, paramValue);
+                }
+                result = method.invoke(clone, viewModel);
+            }else{
+                result = method.invoke(clone);
+            }
+
             if(result instanceof ModelView){
                 ModelView modelView = (ModelView) result;
                 this.fillingAttribute(modelView, req, rep);
@@ -86,7 +134,7 @@ public class FrontServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp){
         try {
             this.processRequest(req, resp);
         } catch (Exception e) {
@@ -95,7 +143,7 @@ public class FrontServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp){
         try {
             this.processRequest(req, resp);
         } catch (Exception e) {
@@ -179,7 +227,7 @@ public class FrontServlet extends HttpServlet {
                             for(Method method : clazz.getDeclaredMethods()){
                                 if(method.isAnnotationPresent(Url.class)){
                                     Url url = (Url) method.getAnnotation(Url.class);
-                                    this.getMappingUrls().put(url.name(), new Mapping(clazz.getName(), method.getName()));
+                                    this.getMappingUrls().put(url.name(), new Mapping(clazz.getName(), method));
                                 }
                             }
                         }

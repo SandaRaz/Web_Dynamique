@@ -28,6 +28,10 @@ public class ModelView {
 
     }
 
+    public ModelView(String view) {
+        this.view = view;
+    }
+
     public ModelView(String view, HashMap<String,Object> data) {
         this.setView(view);
         this.setData(data);
