@@ -1,6 +1,7 @@
 package test;
 
 import etu2079.framework.ModelView;
+import etu2079.framework.ViewModel;
 import etu2079.framework.annotation.Url;
 
 import java.util.ArrayList;
@@ -60,5 +61,16 @@ public class Emp {
         mv.addItem("lst", emps);
 
         return mv;
+    }
+
+    @Url(name = "emp-add")
+    public ModelView addEmp(ViewModel viewModel){
+        String nom = (String) viewModel.getData().get("nom");
+        int age = (int) viewModel.getData().get("age");
+
+        System.out.println("Ajout d'employe:");
+        System.out.println("    Nom: "+nom+" age: "+age);
+
+        return new ModelView("index.jsp");
     }
 }
