@@ -16,25 +16,15 @@
     <title>Test</title>
 </head>
 <body>
-    <h1>Affichage de tous les employes</h1>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>NOM</th>
-            <th>SALAIRE</th>
-        </tr>
-        <%
-            for(Emp emp : list){
-        %>
-                <tr>
-                    <td><%= emp.id %></td>
-                    <td><%= emp.nom %></td>
-                    <td><%= emp.salaire %></td>
-                </tr>
-        <%
-            }
-        %>
-    </table>
+    <h1>Liste des employées</h1>
+    
+    <%
+        for(Emp emp : list){
+    %>
+            <p><%= emp.nom %> - <a href="emp-detail?id=<%= emp.id %>&surnom=Surname"><b>Details</b></a> <p>
+    <%
+        }
+    %>
     <a href="index.jsp"><-----</a>
 </body>
 </html>

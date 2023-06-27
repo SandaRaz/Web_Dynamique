@@ -8,6 +8,7 @@
 <h1><%= "Hello World!" %>
 </h1>
 <br/>
-<a href="emp-all">test Servlet</a>
+<a href="emp-all"><p>test Servlet</p></a>
+<a href="./addEmp.jsp"><p>Ajout</p></a>
 </body>
 </html>

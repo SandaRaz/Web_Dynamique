@@ -2,8 +2,14 @@ package test;
 
 import etu2079.framework.ModelView;
 import etu2079.framework.annotation.Url;
+import etu2079.framework.annotation.Param;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Emp {
@@ -45,7 +51,7 @@ public class Emp {
         this.salaire = salaire;
     }
 
-    @Url(name = "emp-all")
+    @Url("emp-all")
     public ModelView getAll(){
         System.out.println("Select * from employe");
 
@@ -60,5 +66,21 @@ public class Emp {
         mv.addItem("lst", emps);
 
         return mv;
+    }
+
+    @Url("emp-save")
+    public ModelView addEmp(@Param("ddn") Date ddn){
+
+        System.out.println("Ajout d'employe:");
+        System.out.println("    Nom: "+this.nom+" Date de Naissance: "+ddn+" salaire: "+this.salaire);
+
+        return new ModelView("index.jsp");
+    }
+
+    @Url("emp-detail")
+    public ModelView detailEmp(@Param("ddn") Date ddn, @Param("surnom") String surname){
+        System.out.println("Votre id: "+ddn+" votre surnom: "+surname);
+
+        return new ModelView("index.jsp");
     }
 }
