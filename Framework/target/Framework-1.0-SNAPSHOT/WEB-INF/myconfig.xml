@@ -2,5 +2,7 @@
 <configuration>
     <myclasspath>
         <package>test</package>
+
+<!--    <package> Votre package </package>         -->
     </myclasspath>
 </configuration>
