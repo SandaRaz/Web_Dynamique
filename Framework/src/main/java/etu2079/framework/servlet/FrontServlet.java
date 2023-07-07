@@ -1,12 +1,12 @@
 package etu2079.framework.servlet;
 
+import com.google.gson.Gson;
 import etu2079.framework.Mapping;
 import etu2079.framework.ModelView;
-import etu2079.framework.annotation.Scope;
-import etu2079.framework.annotation.Url;
+import etu2079.framework.annotation.*;
 
-import etu2079.framework.annotation.Param;
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -35,6 +35,8 @@ import java.util.*;
 public class FrontServlet extends HttpServlet {
     private HashMap<String, Mapping> MappingUrls;
     private HashMap<Class<?>, Object> MappingSingletons;
+    private String loginSessionName;
+    private String profilSessionName;
 
     public HashMap<String, Mapping> getMappingUrls() {
         return MappingUrls;
@@ -50,6 +52,19 @@ public class FrontServlet extends HttpServlet {
         MappingSingletons = mappingSingletons;
     }
 
+    public String getLoginSessionName() {
+        return loginSessionName;
+    }
+    public void setLoginSessionName(String loginSessionName) {
+        this.loginSessionName = loginSessionName;
+    }
+
+    public String getProfilSessionName() {
+        return profilSessionName;
+    }
+    public void setProfilSessionName(String profilSessionName) {
+        this.profilSessionName = profilSessionName;
+    }
 
     @Override
     public void init(){
@@ -57,6 +72,10 @@ public class FrontServlet extends HttpServlet {
             String[] packages = this.readConfig();
             this.fillMappingUrls(packages);
             this.fillMappingSingletons(packages);
+
+            ServletContext context = getServletContext();
+            this.setLoginSessionName(context.getInitParameter("LoginSessionName"));
+            this.setProfilSessionName(context.getInitParameter("LoginProfilName"));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -79,6 +98,7 @@ public class FrontServlet extends HttpServlet {
         Set<String> mvSessionName = modelView.getSession().keySet();
         for(String key : mvSessionName){
             session.setAttribute(key, modelView.getSession().get(key));
+            System.out.println("Placer le session: "+key);
         }
     }
 // ----------------------------------------------------------------------------
@@ -205,16 +225,56 @@ public class FrontServlet extends HttpServlet {
                 }
             }
 
+            this.checkMethod(method, req.getSession());
             Object result = method.invoke(clone, args);
+            Gson gson = new Gson();
+            ServletContext context = getServletContext();
+            // Traitement resultats --------------------------------
             if(result instanceof ModelView){
                 ModelView modelView = (ModelView) result;
                 this.fillingAttribute(modelView, req, rep);
                 this.fillingSession(modelView, req, rep);
                 this.redirect(modelView.getView(), req, rep);
+
+                if(modelView.isJson()){
+                    String json = gson.toJson(modelView);
+                    rep.setContentType("application/json");
+                    rep.setCharacterEncoding("UTF-8");
+                    rep.getWriter().write(json);
+                    System.out.println("-------------- JSON >>> "+json);
+                    out.print("JSON >>> "+json);
+                }else{
+                    this.encodingJson(method, modelView, gson, rep);
+                }
+
+                if(modelView.isInvalidateSession()){
+                    Enumeration<String> attributeNames = context.getAttributeNames();
+
+                    System.out.println(" --------------- KILL ALL SESSION -------------");
+                    // Parcourez les attributs de session
+                    while (attributeNames.hasMoreElements()) {
+                        String attributeName = attributeNames.nextElement();
+                        if (attributeName.startsWith("javax.servlet.http.HttpSession") || attributeName.startsWith("jakarta.servlet.http.HttpSession")) {
+                            HttpSession tempSession = (HttpSession) context.getAttribute(attributeName);
+                            tempSession.invalidate();
+                            System.out.println("Session \""+attributeName+"\" removed >>> "+tempSession);
+                        }
+                    }
+                }
+                System.out.println(" --------------- KILL ALL SPECIFIED SESSION -------------");
+                List<String> removesessions = modelView.getRemoveSession();
+                for(String sessionName : removesessions){
+                    HttpSession tempSession = (HttpSession) context.getAttribute(sessionName);
+                    tempSession.invalidate();
+                    System.out.println("Session \""+sessionName+"\" removed >>> "+tempSession);
+                }
+            }else{
+                this.encodingJson(method, result, gson, rep);
             }
+            // -----------------------------------------------------
         }else{
             //System.out.println("Url inconnu");
-            throw new Exception("Url inconnu");
+            throw new Exception("Url inconnu: "+incomingURL);
         }
     }
 
@@ -385,8 +445,35 @@ public class FrontServlet extends HttpServlet {
     }
 // --------------------------------------------------------------------------------------------------
 
-    public void checkMethod(){
+    // Verifier si une methode est annoté Auth()
+    public void checkMethod(Method method, HttpSession session) throws Exception {
+        Class<?> clazz = method.getClass();
+        if(clazz.isAnnotationPresent(Auth.class)){
+            Auth auth = (Auth) clazz.getAnnotation(Auth.class);
 
+            // si c'est Auth("Profil")
+            if(!auth.value().isEmpty() && auth.value().equals(this.getProfilSessionName())){
+                if(session.getAttribute(this.getProfilSessionName()) == null){
+                    throw new Exception("Profil d'Administrateur requise");
+                }
+            }else{
+                if(session.getAttribute(this.getLoginSessionName()) == null){
+                    throw new Exception("Authentification necessaire requise");
+                }
+            }
+        }
+    }
+
+    public void encodingJson(Method method, Object result, Gson gson, HttpServletResponse rep) throws IOException {
+        if(method.getClass().isAnnotationPresent(RestAPI.class)){
+            String json = gson.toJson(result);
+            rep.setContentType("application/json");
+            rep.setCharacterEncoding("UTF-8");
+            rep.getWriter().write(json);
+            PrintWriter out = rep.getWriter();
+            System.out.println("-------------- JSON PAR ANNOTATION >>> "+json);
+            out.print("JSON PAR ANNOTATION >>> "+json);
+        }
     }
 }
 

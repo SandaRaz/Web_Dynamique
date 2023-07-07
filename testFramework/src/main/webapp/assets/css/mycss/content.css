@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'montserrat';
+  src: url('../../myfonts/montserrat/Montserrat-Light.otf');
+}
+@font-face {
+  font-family: 'dancing';
+  src: url('../../myfonts/dancing/Dancing Script OT.otf');
+}
+@font-face {
+  font-family: 'quicksand';
+  src: url('../../myfonts/quicksand/Quicksand-Regular.ttf');
+}
+
+.accueil-cont{
+	border-style: solid;
+	width: 100%;
+	height: auto;
+}
+
+#Bienvenue{
+	width: fit-content;
+	height: auto;
+	font-family: 'montserrat';
+	border-style: solid;
+	border-radius: 10px;
+}
+#title1{
+	font-size: xxx-large;
+	font-weight: bold;
+}
+
+.parag-cont{
+	font-size: smaller;
+}

@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'montserrat';
+  src: url('../../myfonts/montserrat/Montserrat-Light.otf');
+}
+@font-face {
+  font-family: 'dancing';
+  src: url('../../myfonts/dancing/Dancing Script OT.otf');
+}
+@font-face {
+  font-family: 'quicksand';
+  src: url('../../myfonts/quicksand/Quicksand-Regular.ttf');
+}
+
+.backg{
+	border-style: hidden;
+	width: 100%;
+	height: auto;
+	background: url("../../images/background/c.jpg");
+	/*background: white;*/
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover
+}
+
+.my_containers{
+	font-family: 'montserrat';
+	border-style: hidden;
+	border-color: blue;
+	width: 100%;
+	min-height: 800px;
+	height: fit-content;
+}
+.virtual_header{
+	border-style: hidden;
+	width: 100%;
+	height: 110px;
+}
+.back-to-top {
+  position: fixed;
+  display: none;
+  background: #7C80FC;
+  color: #fff;
+  padding: 15px 15px;
+  text-align: center;
+  line-height: 1;
+  font-size: 17px;
+  border-radius: 50%;
+  right: 15px;
+  bottom: 15px;
+  transition: background 0.5s;
+  z-index: 11;
+}

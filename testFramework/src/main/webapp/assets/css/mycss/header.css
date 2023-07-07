@@ -1,0 +1,145 @@
+@font-face {
+  font-family: 'montserrat';
+  src: url('../../myfonts/montserrat/Montserrat-Light.otf');
+}
+@font-face {
+  font-family: 'dancing';
+  src: url('../../myfonts/dancing/Dancing Script OT.otf');
+}
+@font-face {
+  font-family: 'quicksand';
+  src: url('../../myfonts/quicksand/Quicksand-Regular.ttf');
+}
+.contains{
+  position: fixed;
+	border-style: hidden;
+	width: 100%;
+	height: auto;
+  background: #D6CFFF;
+  box-shadow: 0px 0px 5px 1px grey,
+              0px 0px 10px 5px lightgrey;
+}
+.contains-reduce{
+  transition: opacity 0.5s;
+  opacity: 5%;
+}
+.contains-trans{
+  transition: opacity 0.5s;
+  opacity: 100%;
+}
+
+.contains2{
+  height: 100%;
+  background: linear-gradient(to bottom,#ABA0F9,#EBE3F5);
+}
+
+/* ----------------- Nav text -------------------- */
+.Logo{
+  border-style: hidden;
+  border-color: black;
+  margin-left: 0%;
+  margin-right: auto;
+  width: 290px;
+  display: grid;
+  grid-template-columns: 40px 75%;
+  grid-gap: 2%;
+}
+#Logo_img{
+  border-style: hidden;
+  border-right: hidden;
+  border-left: hidden;
+  width: 40px;
+  height: 40px;
+  align-self: center;
+}
+#bt_title{
+  font-family: 'dancing';
+}
+.nav_text{
+  color: white;
+  font-family: 'montserrat';
+}
+
+.nav_page_text{
+  font-family: 'montserrat';
+  font-size: small;
+}
+
+.nav_page_text:hover{
+  color: white;
+  background-color: #D6CFFF;
+}
+
+.navigs{
+  border-style: hidden;
+  border-color: #D6CFFF;
+  width: fit-content;
+  height: 40px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+/* --------------------  TITRE ACTIVE ----------------------- */
+.navigs_active .head_cont #nav_text{
+  color: #7C80FC;
+}
+.navigs_active span{
+  background: white;
+}
+
+/* ---------------------------------------------------------- */
+
+.navigs .head_cont{
+  margin-bottom: 0px; 
+}
+
+.navigs:hover .head_cont #nav_text{
+  color: #7C80FC;
+}
+.navigs span{
+  margin-top: 0px;
+  width: 100%;
+  height: 3px;
+  display: block;
+  box-sizing: border-box;
+}
+.navigs:hover span{
+  content: '';
+  display: block;
+  width:100%;
+  height: 3px;
+  background: none;
+  animation: anims 1.5s;
+}
+
+@keyframes anims {
+  0% {
+  transform:scaleX(0);
+  transform-origin: left;
+  background: white;
+  }
+  50%
+  {
+    transform:scaleX(1);
+    transform-origin: left;
+    background: white;
+  }
+  50.1%
+  {
+    transform:scaleX(1);
+    transform-origin: right;
+    background: white;
+    
+  }
+  
+  100%
+  {
+    transform:scaleX(0);
+    transform-origin: right;
+    background: none;
+  }
+  
+  
+}
+/* ----------------------------------------------- */
+
