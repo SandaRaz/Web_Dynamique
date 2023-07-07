@@ -274,7 +274,7 @@ public class FrontServlet extends HttpServlet {
             // -----------------------------------------------------
         }else{
             //System.out.println("Url inconnu");
-            throw new Exception("Url inconnu");
+            throw new Exception("Url inconnu: "+incomingURL);
         }
     }
 

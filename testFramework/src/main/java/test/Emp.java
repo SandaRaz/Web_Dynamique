@@ -1,6 +1,7 @@
 package test;
 
 import etu2079.framework.ModelView;
+import etu2079.framework.annotation.Auth;
 import etu2079.framework.annotation.Url;
 import etu2079.framework.annotation.Param;
 
@@ -56,9 +57,9 @@ public class Emp {
         System.out.println("Select * from employe");
 
         List<Emp> emps = new ArrayList<>();
-        emps.add(new Emp("1","AAA",1000));
-        emps.add(new Emp("2","BBB",2000));
-        emps.add(new Emp("3","CCC",3000));
+        emps.add(new Emp("1","Sanda",1000));
+        emps.add(new Emp("2","TsySanda",2000));
+        emps.add(new Emp("3","MbolaTsySanda",3000));
 
 
         ModelView mv = new ModelView();
@@ -68,18 +69,11 @@ public class Emp {
         return mv;
     }
 
-    @Url("emp-save")
+    @Auth @Url("emp-save")
     public ModelView addEmp(@Param("ddn") Date ddn){
 
         System.out.println("Ajout d'employe:");
         System.out.println("    Nom: "+this.nom+" Date de Naissance: "+ddn+" salaire: "+this.salaire);
-
-        return new ModelView("index.jsp");
-    }
-
-    @Url("emp-detail")
-    public ModelView detailEmp(@Param("ddn") Date ddn, @Param("surnom") String surname){
-        System.out.println("Votre id: "+ddn+" votre surnom: "+surname);
 
         return new ModelView("index.jsp");
     }

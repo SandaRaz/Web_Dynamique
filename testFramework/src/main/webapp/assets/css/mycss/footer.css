@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'montserrat';
+  src: url('../../myfonts/montserrat/Montserrat-Light.otf');
+}
+@font-face {
+  font-family: 'dancing';
+  src: url('../../myfonts/dancing/Dancing Script OT.otf');
+}
+@font-face {
+  font-family: 'quicksand';
+  src: url('../../myfonts/quicksand/Quicksand-Regular.ttf');
+}
+
+.footer_container{
+	border-style: solid;
+	border-color: white;
+	border-width: 0.1px;
+	width: 100%;
+	height: auto;
+	margin-top: 5%;
+	background: white;
+	box-shadow: 0px 0px 5px 1px grey,
+              	0px 0px 10px 5px lightgrey;
+}
+.sous_footer_container{
+	width: 100%; 
+	margin-top: 8px; 
+	margin-bottom: 8px; 
+	border-style: solid;
+	border-top-color: #ABA0F9;
+	border-bottom-color: #EBE3F5;
+	border-left: hidden;
+	border-right: hidden;
+	background: linear-gradient(to bottom ,#ABA0F9,#EBE3F5);
+}
+.footer_contains{
+	font-family: 'montserrat';
+	font-size: small;
+	border-style: hidden;
+	width: auto;
+	height: auto;
+}
+.para2{
+	font-size: 80%;
+}
+.social-link{
+	color: #7C80FC;
+	font-size: large;
+}
+.social-link:hover{
+	color: white;
+}
