@@ -237,14 +237,14 @@ public class FrontServlet extends HttpServlet {
                 this.redirect(modelView.getView(), req, rep);
 
                 if(modelView.isJson()){
-                    String json = gson.toJson(modelView);
+                    String json = gson.toJson(modelView.getData());
                     rep.setContentType("application/json");
                     rep.setCharacterEncoding("UTF-8");
                     rep.getWriter().write(json);
                     System.out.println("-------------- JSON >>> "+json);
                     out.print("JSON >>> "+json);
                 }else{
-                    this.encodingJson(method, modelView, gson, rep);
+                    this.encodingJson(method, modelView.getData(), gson, rep);
                 }
 
                 if(modelView.isInvalidateSession()){
